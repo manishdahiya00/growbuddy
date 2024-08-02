@@ -1,0 +1,117 @@
+    <%= render partial: "shared/navbar" %>
+<div class="container mx-auto px-4 py-8 bg-white">
+  <div class="rounded-lg shadow-lg overflow-hidden">
+    <div class="md:flex">
+      <div class="md:flex-shrink-0 p-6 ">
+        <% if @user %>
+          <%= image_tag @user.social_img_url , class: "w-32 h-32 rounded-full mx-auto md:mx-0"
+            %>
+        <% end %>
+      </div>
+      <div class="p-8 bg-white">
+        <% if @user %>
+          <h2 class="text-2xl font-bold text-gray-800 mb-2"><%= @user.social_name %></h2>
+          <p class="text-gray-600 mb-4"><%= @user.social_email %></p>
+          <p class="text-gray-600 mb-4"><%= @user.mobile_number %></p>
+          <%= button_to "Log Out" , logout_path , method: :delete,
+            class: "text-white font-bold py-2 px-4 rounded",style:"background-color:#2177fa"%>
+        <% else %>
+          <div class="text-center">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Sign In To View Your Profile</h2>
+            <%= google_sign_in_button proceed_to: google_login_path, data: { turbo: false },class: "inline-flex items-center bg-white border border-gray-300 rounded-md shadow-sm px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" do %>
+              <%= image_tag('https://www.google.com/favicon.ico', alt: 'Google' , class: "w-5 h-5 mr-2" ) %> Sign in
+              with Google
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <% if @user %>
+      <div class="border-t border-gray-200 bg-white">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-6">
+          <div class="rounded-lg p-6 text-center" style="background-color:#FBD3B89C">
+            <p class="text-lg font-semibold" style="color:#FF6600">Total Referrals</p>
+            <p class="text-3xl font-bold " style="color:#FF6600"><%= @total_referrals %></p>
+          </div>
+          <div class="bg-blue-100 rounded-lg p-6 text-center">
+            <p class="text-lg font-semibold text-blue-800">Total Earnings</p>
+            <p class="text-3xl font-bold text-blue-600">₹ 0</p>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-gray-200 p-6 bg-white">
+        <h3 class="text-xl font-semibold mb-4">Submit Your Redeem Request</h3>
+        <%= form_with url: "", method: :post, class: "bg-white shadow-lg rounded-lg p-6 w-full max-w-md mx-auto flex flex-col gap-4" do |f| %>
+          <% if alert %>
+            <p class="text-red-500 text-sm"><%= alert %></p>
+          <% end %>
+          <%= f.hidden_field :user_id, value: @user.id %>
+          <%= f.hidden_field :pay_email, value: @user.social_email %>
+          <div class="flex flex-col gap-2">
+            <%= f.label :mobile_number, "Mobile Number", class: "text-gray-700 font-medium" %>
+            <%= f.telephone_field :pay_phone,class: "text-md p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400", placeholder: "Enter your mobile number",pattern: "[0-9]{10}",title: "Please enter 10 digits",required: true %>
+          </div>
+          <div class="flex flex-col gap-2">
+            <%= f.label :upi_id, "Valid UPI ID", class: "text-gray-700 font-medium" %>
+            <%= f.text_field :upi_id,class: "text-md p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400",placeholder: "Enter your valid UPI ID",required: true %>
+          </div>
+          <div class="flex flex-col gap-2">
+            <%= f.label :amount, "Amount", class: "text-gray-700 font-medium" %>
+            <%= f.number_field :pay_amount,class: "text-md p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400", placeholder: "Enter the amount",required: true %>
+          </div>
+          <div class="flex justify-center mt-4">
+            <%= f.submit "Redeem",
+          class: "w-full  text-white font-bold py-2 px-4 rounded transition duration-300", style:"background-color:#2177fa"%>
+          </div>
+        <% end %>
+      </div>
+      <div class="border-t border-gray-200 p-6 bg-white">
+        <h3 class="text-xl font-semibold mb-4">OfferWall History</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Date</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Offer Name</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Status</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <% @offers.each do |offer| %>
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= offer.created_at %></td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><%= offer.offer_name %></td>
+                  <td class="px-6 py-4 whitespace-nowrap"><span
+                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"><%= offer.status %></span>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="border-t border-gray-200 p-6 bg-white">
+        <h3 class="text-xl font-semibold mb-4">Redeem History</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Date</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Amount</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Status</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

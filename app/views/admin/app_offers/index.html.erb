@@ -1,0 +1,59 @@
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <p id="notice" style="color:orange;"><%= notice %></p>
+      <div class="col-lg-12 d-flex flex-row">
+        <h2 class="page-header" style="margin: 10px 0 15px !important;">Listing App Offers</h2>
+      </div>
+      <div style="margin-bottom:15px;">
+        <%= link_to 'New App Offer', new_admin_app_offer_path, class: 'btn btn-primary ml-auto' %>
+      </div>
+      <div>
+        <%= form_with(url: admin_app_offers_path, method: :get) do |f| %>
+          <div class="form-group">
+            <%= f.text_field :q, placeholder: "Search by Offer Name or Identifier", class: "form-control" %>
+          </div>
+        <% end %>
+      </div>
+      <% if @app_offers.present? %>
+        <table class="table table-responsive table-bordered">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Offer Image</th>
+              <th>Offer Name</th>
+              <th>Offer Amount</th>
+              <th>Status</th>
+              <th>Identifier</th>
+              <th>Pay Amt/Ref Amt</th>
+              <th>Created At</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @app_offers.each do |app_offer| %>
+              <tr>
+                <td><%= app_offer.id %></td>
+                <td><img style="width:30px;" src="<%=app_offer.try(:image_url)%>" onerror="this.onerror=null;this.src='https://cdn.pixabay.com/photo/2014/03/24/17/21/wrong-295503_640.png';" /></td>
+                <td><%= app_offer.offer_name %></td>
+                <td><%= app_offer.offer_amount %></td>
+                <td><%= app_offer.status ? 'Active' : 'Inactive' %></td>
+                <td><%= app_offer.identifier %></td>
+                <td><%= app_offer.offer_amount %> / <%= app_offer.refer_amount %></td>
+                <td><%= l(app_offer.created_at, format: :long) %></td>
+                <td style="display:flex;gap:5px;">
+                  <%= link_to 'Show', admin_app_offer_path(app_offer), class: 'btn btn-primary btn-sm' %>
+                  <%= link_to 'Edit', edit_admin_app_offer_path(app_offer), class: 'btn btn-warning btn-sm' %>
+                  <%= button_to 'Delete', admin_app_offer_path(app_offer), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= will_paginate @app_offers %>
+      <% else %>
+        <h1 class="text-center">No App Offers Found</h1>
+      <% end %>
+    </div>
+  </div>
+</div>

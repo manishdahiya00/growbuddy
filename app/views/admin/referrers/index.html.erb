@@ -1,0 +1,57 @@
+<!-- Page Content -->
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <p id="notice" style="color:orange;"><%= notice %></p>
+      <div class="col-lg-12 d-flex flex-row">
+        <h2 class="page-header" style="margin: 10px 0 15px !important;">Listing Referrers</h2>
+      </div>
+      <div>
+        <%= form_with(url: admin_referrers_path, method: :get) do |f| %>
+          <div class="form-group">
+            <%= f.text_field :q, placeholder: "Search by Paytm Number or Upi Id or Click Id", class: "form-control" %>
+          </div>
+        <% end %>
+      </div>
+      <% if @referrers.present? %>
+        <table class="table table-responsive table-bordered">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Referrer Number</th>
+              <th>UPI ID</th>
+              <th>App Offer ID</th>
+              <th>Click ID</th>
+              <th>Affiliate ID</th>
+              <th>Source IP</th>
+              <th>Affiliate Status</th>
+              <th>Referrer Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @referrers.each do |referrer| %>
+              <tr>
+                <td><%= referrer.id %></td>
+                <td><%= referrer.paytm_number %></td>
+                <td><%= referrer.upi_id %></td>
+                <td><a href="/admin/app_offers/<%= referrer.app_offer_id %>" ><%= referrer.app_offer.offer_name %></a></td>
+                <td><%= referrer.click_id %></td>
+                <td><a href="/admin/affiliates/<%= referrer.affiliate_id %>"><%= referrer.affiliate_id %></a></td>
+                <td><%= referrer.source_ip %></td>
+                <td><%= referrer.aff_status ? 'Active' : 'Inactive' %></td>
+                <td><%= referrer.ref_status ? 'Active' : 'Inactive' %></td>
+                <td>
+                  <%= link_to 'Show', admin_referrer_path(referrer), class: 'btn btn-primary btn-sm' %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= will_paginate @referrers %>
+      <% else %>
+        <h1 class="text-center">No Referrers Found</h1>
+      <% end %>
+    </div>
+  </div>
+</div>

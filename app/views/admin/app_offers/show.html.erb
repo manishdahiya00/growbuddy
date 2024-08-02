@@ -1,0 +1,218 @@
+<!-- Page Content -->
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <p id="notice" style="color:orange;"><%= notice %></p>
+      <div class="col-lg-12 d-flex flex-row">
+        <h2 class="page-header" style="margin: 10px 0 15px !important;">App Offer Details</h2>
+      </div>
+      <% if @app_offer.present? %>
+        <!-- Basic Information Table -->
+        <table class="table table-responsive table-bordered">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Offer Name</th>
+              <th>Offer Amount</th>
+              <th>Status</th>
+              <th>Identifier</th>
+              <th>Offer Priority</th>
+              <th>Created At</th>
+              <th>Updated At</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><%= @app_offer.id %></td>
+              <td><%= @app_offer.offer_name %></td>
+              <td><%= @app_offer.offer_amount %></td>
+              <td><%= @app_offer.status ? 'Active' : 'Inactive' %></td>
+              <td><%= @app_offer.identifier %></td>
+              <td><%= @app_offer.offer_priority %></td>
+              <td><%= l(@app_offer.created_at, format: :long) %></td>
+              <td><%= l(@app_offer.updated_at, format: :long) %></td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Links and Identifiers Table -->
+        <table class="table table-responsive table-bordered">
+          <thead>
+            <tr>
+              <th>WhatsApp Link</th>
+              <th>Action URL</th>
+              <th>Image URL</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><%= @app_offer.whatsapp_link %></td>
+              <td><%= @app_offer.action_url %></td>
+              <td><img style="width:40px;" src="<%= @app_offer.try(:image_url) %>" onerror="this.onerror=null;this.src='https://cdn.pixabay.com/photo/2014/03/24/17/21/wrong-295503_640.png';" /></td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Offer Types Table -->
+        <table class="table table-responsive table-bordered">
+          <thead>
+            <tr>
+              <th>Instagram Offer</th>
+              <th>Retention Offer</th>
+              <th>Event Offer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><%= @app_offer.insta_offer ? 'Yes' : 'No' %></td>
+              <td><%= @app_offer.retention_offer ? 'Yes' : 'No' %></td>
+              <td><%= @app_offer.event_offer ? 'Yes' : 'No' %></td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Cap and Amounts Table -->
+        <table class="table table-responsive table-bordered">
+          <thead>
+            <tr>
+              <th>Daily Cap</th>
+              <th>Refer Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><%= @app_offer.daily_cap %></td>
+              <td><%= @app_offer.refer_amount %></td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Descriptions Table -->
+        <table class="table table-responsive table-bordered">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Instructions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><%= @app_offer.description %></td>
+              <td><%= @app_offer.instructions %></td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Add Event Button -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addEventModal" style="margin-bottom:15px;">
+          Add Event
+        </button>
+        <!-- Add Event Modal -->
+        <div class="modal fade" id="addEventModal" tabindex="-1" role="dialog" aria-labelledby="addEventLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="addEventLabel">New Offer Event</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <%= form_with(model: [@app_offer, @offer_event], url: admin_app_offer_offer_events_path(@app_offer), method: :post, local: true) do |form| %>
+                  <div class="form-group">
+                    <%= form.label :event_order %>
+                    <%= form.number_field :event_order, class: "form-control" %>
+                  </div>
+                  <div class="form-group">
+                    <%= form.label :event_title %>
+                    <%= form.text_field :event_title, class: "form-control" %>
+                  </div>
+                  <div class="form-group">
+                    <%= form.label :event_amount %>
+                    <%= form.number_field :event_amount, class: "form-control" %>
+                  </div>
+                  <div class="form-group">
+                    <%= form.label :pay_type %>
+                    <%= form.select :pay_type,[["Auto"], ["Manual"]],{} ,class: "form-control" %>
+                  </div>
+                  <%= form.hidden_field :app_offer_id, value: @app_offer.id %>
+                  <div class="modal-footer">
+                    <%= form.submit "Create Event", class: "btn btn-primary" %>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Edit Event Modals -->
+        <% @offer_events.each do |event| %>
+          <div class="modal fade" id="editEventModal<%= event.id %>" tabindex="-1" role="dialog" aria-labelledby="editEventLabel<%= event.id %>" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="editEventLabel<%= event.id %>">Edit Offer Event</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <%= form_with(model: [@app_offer, event], url: admin_app_offer_offer_event_path(@app_offer, event), method: :patch, local: true) do |form| %>
+                    <div class="form-group">
+                      <%= form.label :event_title %>
+                      <%= form.text_field :event_title, class: "form-control" %>
+                    </div>
+                    <div class="form-group">
+                      <%= form.label :event_amount %>
+                      <%= form.number_field :event_amount, class: "form-control" %>
+                    </div>
+                    <div class="form-group">
+                      <%= form.label :pay_type %>
+                      <%= form.select :pay_type,[["Auto"], ["Manual"]],{} ,class: "form-control" %>
+                    </div>
+                    <div class="form-group">
+                      <%= form.label :event_order %>
+                      <%= form.number_field :event_order, class: "form-control" %>
+                    </div>
+                    <%= form.hidden_field :app_offer_id, value: @app_offer.id %>
+                    <div class="modal-footer">
+                      <%= form.submit "Update Event", class: "btn btn-primary" %>
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+        <!-- Offer Events Table -->
+        <% if @offer_events.present? %>
+          <table class="table table-responsive table-bordered">
+            <thead>
+              <tr>
+                <th>Event Order</th>
+                <th>Event Title</th>
+                <th>Payout</th>
+                <th>Pay Type</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @offer_events.each do |event| %>
+                <tr>
+                  <td><%= event.event_order %></td>
+                  <td><%= event.event_title %></td>
+                  <td><%= event.event_amount %></td>
+                  <td><%= event.pay_type %></td>
+                  <td class="app-banner-action" style="display: flex; gap: 5px;">
+                    <%= link_to "Edit", "#", class: "btn btn-warning", data: { toggle: "modal", target: "#editEventModal#{event.id}" } %>
+                    <%= button_to "Delete", admin_app_offer_offer_event_path(@app_offer, event), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <h1 class="not-found">No Offer Events Found</h1>
+        <% end %>
+      <% else %>
+        <h1 class="not-found">App Offer Not Found</h1>
+      <% end %>
+    </div>
+  </div>
+</div>

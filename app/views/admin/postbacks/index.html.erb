@@ -1,0 +1,48 @@
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <p id="notice" style="color:orange;"><%= notice %></p>
+      <div class="col-lg-12 d-flex flex-row">
+        <h2 class="page-header" style="margin: 10px 0 15px !important;">Listing Postbacks</h2>
+      </div>
+      <div>
+        <%= form_with(url: admin_postbacks_path, method: :get) do |f| %>
+          <div class="form-group">
+            <%= f.text_field :q, placeholder: "Search by Click Id", class: "form-control" %>
+          </div>
+        <% end %>
+      </div>
+      <% if @postbacks.present? %>
+        <table class="table table-responsive table-bordered">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>App Offer</th>
+              <th>Offer Event</th>
+              <th>Click Id</th>
+              <th>Source Ip</th>
+              <th>Aff Status/Ref Status</th>
+              <th>Created At</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @postbacks.each do |postback| %>
+              <tr>
+                <td><%= postback.id %></td>
+                <td><a href="/admin/app_offers/<%= AppOffer.find_by(identifier: postback.offer).id %>"><%= postback.offer %></a></td>
+                <td><%= postback.event %></td>
+                <td><a href="/admin/affiliates/<%= Affiliate.find_by(click_id: postback.click_id).id %>"><%= postback.click_id %></a></td>
+                <td><%= postback.source_ip %></td>
+                <td><%= postback.aff_status %> / <%= postback.ref_status %></td>
+                <td><%= l(postback.created_at, format: :long) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= will_paginate @postbacks %>
+      <% else %>
+        <h1 class="text-center">No Postabcks Found</h1>
+      <% end %>
+    </div>
+  </div>
+</div>

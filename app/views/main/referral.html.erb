@@ -1,0 +1,61 @@
+    <%= render partial: "shared/navbar" %>
+<div class="p-2">
+  <div class="flex flex-col gap-4 items-center p-4">
+    <div class="flex w-full justify-center mb-4">
+      <%= image_tag @app_offer.image_url, class: "h-28 w-28 rounded-md shadow-lg bg-white p-1" %>
+    </div>
+    <div class="flex gap-4">
+      <div class="w-full text-white text-sm p-2 rounded-sm text-center flex flex-wrap justify-between items-center" style="background-color:#2177fa">
+        <div class="flex-1">
+          Install and Register The <%= @app_offer.offer_name %> App
+        </div>
+        <div class="whitespace-nowrap">
+          &nbsp;|&nbsp; Rs. <%= @app_offer.offer_amount %>
+        </div>
+      </div>
+    </div>
+    <%= form_with(method: :post, class: "p-6 bg-white shadow-xs w-full max-w-md flex flex-col gap-4") do |form| %>
+      <h1 class="text-md">Referral Code: <span class="text-blue-500"  ><%= params[:refer_code] %></span></h1>
+      <% if flash.now[:alert] %>
+        <p class="text-red-500"><%= flash.now[:alert] %></p>
+      <% end %>
+      <%= form.hidden_field :app_offer, value: @app_offer.identifier %>
+      <%= form.hidden_field :refer_code, value: @refer_code %>
+      <div class="flex flex-col gap-2">
+        <%= form.label "Mobile Number", class: "text-gray-700 font-medium" %>
+        <%= form.text_field :mobile_number, class: "text-md p-2 border border-gray-300 rounded-md", placeholder: "Enter your mobile number", required: true %>
+      </div>
+      <div class="flex flex-col gap-2">
+        <%= form.label "Valid UPI ID", class: "text-gray-700 font-medium" %>
+        <%= form.text_field :upi_id, class: "text-md p-2 border border-gray-300 rounded-md", placeholder: "Enter your valid UPI ID", required: true %>
+      </div>
+      <div id="recaptcha-loading" class="flex items-center justify-center">
+        <div class="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-l-red-500" role="status">
+        </div>
+      </div>
+      <div id="recaptcha-container" class="flex flex-col gap-2" style="display: none;">
+        <%= raw recaptcha_tags %>
+      </div>
+      <div class="flex justify-center gap-4">
+        <%= form.submit "Complete Offer", name: "commit", value: "Complete Offer", class: "w-full text-white font-semibold p-2 rounded-md shadow-md transition duration-300", style:"background-color:#2177fa"%>
+      </div>
+    <% end %>
+  </div>
+  <div class="flex flex-col gap-4 shadow-xs bg-white p-2 mx-4">
+    <% if @app_offer.instructions.present? %>
+      <h1 class="text-blue-600 text-center text-xl">Offer Terms And Conditions</h1>
+      <div class="border-2 border-black px-8 py-4">
+        <ol class="list-decimal">
+          <% @app_offer.instructions.split("\n").each do |instruction| %>
+            <% unless instruction.strip.empty? %>
+              <% formatted_instruction = instruction.strip.gsub(/^\d+\.\s*/, '') %>
+              <li class="mb-2 text-sm"><%= formatted_instruction %></li>
+            <% end %>
+          <% end %>
+        </ol>
+      </div>
+    <% else %>
+      <p class="text-center">No instructions available.</p>
+    <% end %>
+  </div>
+</div>

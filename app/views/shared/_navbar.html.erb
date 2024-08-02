@@ -1,0 +1,27 @@
+<nav style="background-color:#2177fa">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <div class="flex-shrink-0 flex items-center">
+        <a href="/"> <%= image_tag "logo.png", class: "h-15 w-auto", alt: "Logo" %></a>
+      </div>
+      <div class="hidden md:flex items-center space-x-4">
+        <a href="/" class="text-white hover:text-green-200 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">OfferWall</a>
+        <a href="/profile" class="text-white hover:text-green-200 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">Wallet Profile</a>
+      </div>
+      <div class="md:hidden">
+        <button id="menu-toggle" class="text-white p-2">
+          <span class="sr-only">Open main menu</span>
+          <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div id="mobile-menu" class="md:hidden hidden bg-white">
+    <div class="px-2 pt-2 pb-3 space-y-1">
+      <a href="/" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">OfferWall</a>
+      <a href="/profile" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">Wallet Profile</a>
+    </div>
+  </div>
+</nav>

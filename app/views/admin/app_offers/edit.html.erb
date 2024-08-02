@@ -1,0 +1,100 @@
+<!-- Page Content -->
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <p id="notice" style="color:orange;"><%= notice %></p>
+      <div class="col-lg-12 d-flex flex-row">
+        <h2 class="page-header" style="margin: 10px 0 15px !important;">Edit App Offer</h2>
+      </div>
+      <%= form_with(model: @app_offer, url: admin_app_offer_path, local: true) do |form| %>
+        <% if @app_offer.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(@app_offer.errors.count, "error") %> prohibited this app offer from being saved:</h2>
+            <ul>
+              <% @app_offer.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+        <!-- Form Fields Row -->
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                App Offer Form
+              </div>
+              <div class="panel-body">
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <%= form.label :offer_name %>
+                      <%= form.text_field :offer_name, class: 'form-control' %>
+                    </div>
+                    <div class="form-group">
+                      <%= form.label :offer_amount %>
+                      <%= form.text_field :offer_amount, class: 'form-control' %>
+                    </div>
+                    <div class="form-group">
+                      <%= form.label :daily_cap %>
+                      <%= form.text_field :daily_cap, class: 'form-control' %>
+                    </div>
+                    <div class="form-group">
+                      <%= form.label :whatsapp_link %>
+                      <%= form.text_field :whatsapp_link, class: 'form-control' %>
+                    </div>
+                    <div class="form-group">
+                      <%= form.label :identifier %>
+                      <%= form.text_field :identifier, class: 'form-control' %>
+                    </div>
+                    <div class="form-group">
+                      <%= form.label :refer_amount %>
+                      <%= form.text_field :refer_amount, class: 'form-control' %>
+                    </div>
+                    <div class="form-group">
+                      <%= form.label :image_url %>
+                      <%= form.text_field :image_url, class: 'form-control' %>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <%= form.label :description %>
+                      <%= form.text_area :description, class: 'form-control' %>
+                    </div>
+                    <div class="form-group">
+                      <%= form.label :instructions %>
+                      <%= form.text_area :instructions, class: 'form-control' %>
+                    </div>
+                    <div class="form-group">
+                      <%= form.label :action_url %>
+                      <%= form.text_field :action_url, class: 'form-control' %>
+                    </div>
+                    <div class="form-group">
+                      <%= form.label :offer_priority %>
+                      <%= form.number_field :offer_priority, class: 'form-control' %>
+                    </div>
+                    <div class="form-group">
+                      <%= form.label :status, 'Status' %>
+                      <%= form.select :status, [['Active', true], ['Inactive', false]], {}, { class: 'form-control' } %>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <%= form.submit 'Edit', class: 'btn btn-primary' %>
+                  <%= link_to 'Back to List', admin_app_offers_path, class: 'btn btn-default' %>
+                </div>
+              </div>
+            </div>
+            <!-- /.row (nested) -->
+          </div>
+          <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+      </div>
+      <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+  <% end %>
+</div>
+</div>
+</div>

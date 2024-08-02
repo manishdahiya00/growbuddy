@@ -1,0 +1,74 @@
+<!-- Page Content -->
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <p id="notice" style="color:orange;"><%= notice %></p>
+      <div class="col-lg-12 d-flex flex-row">
+        <h2 class="page-header" style="margin: 10px 0 15px !important;">Referrer Details</h2>
+      </div>
+      <% if @referrer.present? %>
+        <div class="row">
+          <div class="panel-body">
+            <table class="table table-responsive table-bordered">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Live Offer ID</th>
+                  <th>App Offer ID</th>
+                  <th>Click ID</th>
+                  <th>Affiliate ID</th>
+                  <th>Referrer Number</th>
+                  <th>UPI ID</th>
+                  <th>Source IP</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><%= @referrer.id %></td>
+                  <td><%= @referrer.live_offer_id %></td>
+                  <td><%= @referrer.app_offer_id %></td>
+                  <td><%= @referrer.click_id %></td>
+                  <td><a href="/admin/affiliates/<%= @referrer.affiliate_id %>"><%= @referrer.affiliate_id %></a></td>
+                  <td><%= @referrer.paytm_number %></td>
+                  <td><%= @referrer.upi_id %></td>
+                  <td><%= @referrer.source_ip %></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <table class="table table-responsive table-bordered">
+          <thead>
+            <tr>
+              <th>Affiliate Status</th>
+              <th>Referrer Status</th>
+              <th>Affiliate Order ID</th>
+              <th>Referrer Order ID</th>
+              <th>Affiliate Pay Response</th>
+              <th>Referrer Pay Response</th>
+              <th>Created At</th>
+              <th>Updated At</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><%= @referrer.aff_status ? 'Active' : 'Inactive' %></td>
+              <td><%= @referrer.ref_status ? 'Active' : 'Inactive' %></td>
+              <td><%= @referrer.aff_order_id %></td>
+              <td><%= @referrer.ref_order_id %></td>
+              <td><%= @referrer.aff_pay_response %></td>
+              <td><%= @referrer.ref_pay_response %></td>
+              <td><%= l(@referrer.created_at, format: :long) %></td>
+              <td><%= l(@referrer.updated_at, format: :long) %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <h1 class="not-found">Referrer Not Found</h1>
+    <% end %>
+  </div>
+</div>
+</div>
